@@ -1,0 +1,32 @@
+<script type="text/javascript">
+"use strict";
+
+var sss = window.sss || {};
+sss.filelink = sss.filelink || {};
+
+sss.filelink.initializeFunction = "sss.filelink.initialize";
+sss.filelink.waitSeconds = 10;
+
+sss.filelink.getQueryParameterByName = function (strUrl, strName) {
+    if (!strUrl) strUrl = window.location.href;
+    strName = strName.replace(/[\[\]]/g, "\\$&");
+    var objRegex = new RegExp ("[?&]" + strName + "(=([^&#]*)|&|#|$)");
+    var objResults = objRegex.exec (strUrl);
+    if (!objResults) return null;
+    if (!objResults[2]) return '';
+    return decodeURIComponent (objResults[2].replace (/\+/g, " "));
+}
+
+sss.filelink.initialize = function () {
+    var strFileUrl = sss.filelink.getQueryParameterByName ("", "file");
+    if (strFileUrl != "" && strFileUrl != null) {
+        window.open (strFileUrl);
+        setTimeout (function () {window.open ("about:blank", "_self").close ();}, sss.filelink.waitSeconds * 1000);
+    }
+};
+
+window.onload = function () {
+    sss.filelink.initializeFunction ();
+}
+
+</script>
